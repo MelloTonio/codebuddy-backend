@@ -1,6 +1,7 @@
 package mem
 
 import (
+	"math/rand"
 	"testing"
 	"time"
 
@@ -111,7 +112,7 @@ func TestAccountRepo_Store_GetById_GetByCPF(t *testing.T) {
 
 		t.Run("account.Repository.UpdateBalance test", func(t *testing.T) {
 			for i, tc := range PassingStoreCases {
-				var fakeBalance int = 5000
+				var fakeBalance int = rand.Intn(10000-1000) + 1000
 
 				t.Log(tc.Case)
 				err := NewMemAccountRepository.UpdateBalance(&PassingStoreCases[i].In, fakeBalance)
