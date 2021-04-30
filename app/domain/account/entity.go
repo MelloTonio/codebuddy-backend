@@ -11,3 +11,15 @@ type Account struct {
 	Balance    int       `json:"balance"`
 	Created_at time.Time `json:"created_at"`
 }
+
+
+func NewAccount(name string, cpf string, secret string, balance int){
+	return &Account{
+		// ID:     ,		// ToDo: Function to generate ID
+		Name:      name,
+		CPF:       cpf,		// ToDo: Function to parse CPF
+		Secret:    secret, 
+		Balance:   balance,
+		CreatedAt: time.Now(),
+	}
+}
