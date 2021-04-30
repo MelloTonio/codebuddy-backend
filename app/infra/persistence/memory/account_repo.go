@@ -95,7 +95,7 @@ func (memoryRepo *memAccountRepo) GetByCPF(cpf string) (account.Account, error) 
 
 }
 
-func (memoryRepo *memAccountRepo) UpdateBalance(_account account.Account, balance int) error {
+func (memoryRepo *memAccountRepo) UpdateBalance(_account *account.Account, balance int) error {
 	if _account.Id == "" {
 		err := errors.EmptyAccountID_Err
 		memoryRepo.log.WithError(err).Error("Empty Account Id")
