@@ -32,7 +32,7 @@ func (memoryRepo *memAccountRepo) Store(account *account.Account) error {
 
 	memoryRepo.accounts = append(memoryRepo.accounts, *account)
 
-	memoryRepo.log.Info("Account %s created sucessfully", account.Id)
+	//memoryRepo.log.Info("Account %s created sucessfully", account.Id)
 
 	return nil
 }
@@ -46,7 +46,7 @@ func (memoryRepo *memAccountRepo) GetById(id string) (account.Account, error) {
 
 	index := memoryRepo.find(id)
 
-	if index != -1 {
+	if index == -1 {
 		err := errors.AccountNotFound_Err
 		memoryRepo.log.WithError(err).Error("Account not found")
 		return account.Account{}, nil
@@ -156,7 +156,7 @@ func (memoryRepo *memAccountRepo) find(accountID string) int {
 
 func (memoryRepo *memAccountRepo) findByCpf(accountCPF string) int {
 	for index, account := range memoryRepo.accounts {
-		if account.Id == accountCPF {
+		if account.Cpf == accountCPF {
 			return index
 		}
 	}
