@@ -37,6 +37,25 @@ func (memoryRepo *memAccountRepo) Store(account *account.Account) error {
 	return nil
 }
 
+func (memoryRepo *memAccountRepo) GetById(id string) (account.Account, error) {
+	if id == "" {
+		err := errors.EmptyAccountID_Err
+		memoryRepo.log.WithError(err).Error("Empty Account Id")
+		return account.Account{}, err
+	}
+
+	index := memoryRepo.find(id)
+
+	if index != -1 {
+		err := errors.AccountNotFound_Err
+		memoryRepo.log.WithError(err).Error("Account not found")
+		return account.Account{}, nil
+	}
+
+	return memoryRepo.accounts[index], nil
+
+}
+
 func (memoryRepo *memAccountRepo) ExistsByCPF(_account *account.Account) (bool, error) {
 	if _account.Id == "" {
 		err := errors.EmptyAccountID_Err
