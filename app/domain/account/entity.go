@@ -1,6 +1,10 @@
 package account
 
-import "time"
+import (
+	"time"
+
+	"github.com/mellotonio/desafiogo/app/infra/utils"
+)
 
 // Account Entity
 type Account struct {
@@ -14,7 +18,7 @@ type Account struct {
 
 func NewAccount(name string, cpf string, secret string, balance int) *Account {
 	return &Account{
-		// ID:     ,		// ToDo: Function to generate ID
+		Id:         utils.GenUUID(),
 		Name:       name,
 		Cpf:        cpf, // ToDo: Function to parse CPF
 		Secret:     secret,
