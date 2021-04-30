@@ -14,7 +14,7 @@ type memAccountRepo struct {
 	log      *logrus.Entry
 }
 
-func NewAccoutRepository(logger *logrus.Logger) account.Repository {
+func NewAccountRepository(logger *logrus.Logger) account.Repository {
 	return &memAccountRepo{
 		accounts: []account.Account{},
 		log:      logger.WithField("source", "memAccountRepository"),
