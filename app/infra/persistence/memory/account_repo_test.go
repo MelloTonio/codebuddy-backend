@@ -109,5 +109,47 @@ func TestAccountRepo_Store_GetById_GetByCPF(t *testing.T) {
 			}
 		})
 
+		t.Run("account.Repository.UpdateBalance test", func(t *testing.T) {
+			for i, tc := range PassingStoreCases {
+				var fakeBalance int = 5000
+
+				t.Log(tc.Case)
+				err := NewMemAccountRepository.UpdateBalance(&PassingStoreCases[i].In, fakeBalance)
+				assert.NoError(t, err)
+
+				accounts, err := NewMemAccountRepository.ShowAll()
+				assert.NoError(t, err)
+
+				assert.Equal(t, accounts[i].Balance, fakeBalance)
+			}
+		})
+
+		t.Run("account.Repository.getBalance test", func(t *testing.T) {
+			for i, tc := range PassingStoreCases {
+
+				t.Log(tc.Case)
+
+				balance, err := NewMemAccountRepository.GetBalance(tc.In)
+				assert.NoError(t, err)
+
+				accounts, err := NewMemAccountRepository.ShowAll()
+				assert.NoError(t, err)
+
+				assert.Equal(t, accounts[i].Balance, balance)
+			}
+		})
+
+		t.Run("account.Repository.existsByCPF test", func(t *testing.T) {
+			for i, tc := range PassingStoreCases {
+
+				t.Log(tc.Case)
+
+				exists, err := NewMemAccountRepository.ExistsByCPF(&PassingStoreCases[i].In)
+				assert.NoError(t, err)
+
+				assert.True(t, exists)
+			}
+		})
+
 	})
 }
