@@ -21,16 +21,24 @@ func NewAccountRepository(logger *logrus.Logger) account.Repository {
 	}
 }
 
-func (memoryRepo *memAccountRepo) Store(account *account.Account) error {
-	if account.Id == "" {
+func (memoryRepo *memAccountRepo) Store(_account *account.Account) error {
+	if _account.Id == "" {
 		err := errors.EmptyAccountID_Err
 		memoryRepo.log.WithError(err).Error("Empty Account Id")
 		return err
 	}
 
-	account.Created_at = time.Now()
+	index := memoryRepo.findByCpf(_account.Cpf)
 
-	memoryRepo.accounts = append(memoryRepo.accounts, *account)
+	if index != -1 {
+		err := errors.AccountAlreadyExists_Err
+		memoryRepo.log.WithError(err).Error("Account already exists")
+		return err
+	}
+
+	_account.Created_at = time.Now()
+
+	memoryRepo.accounts = append(memoryRepo.accounts, *_account)
 
 	//memoryRepo.log.Info("Account %s created sucessfully", account.Id)
 
@@ -49,7 +57,7 @@ func (memoryRepo *memAccountRepo) GetById(id string) (account.Account, error) {
 	if index == -1 {
 		err := errors.AccountNotFound_Err
 		memoryRepo.log.WithError(err).Error("Account not found")
-		return account.Account{}, nil
+		return account.Account{}, err
 	}
 
 	return memoryRepo.accounts[index], nil
@@ -127,6 +135,7 @@ func (memoryRepo *memAccountRepo) GetBalance(account account.Account) (int, erro
 	if index == -1 {
 		err := errors.AccountNotFound_Err
 		memoryRepo.log.WithError(err).Error("Account Not Found")
+		return -1, err
 	}
 
 	return memoryRepo.accounts[index].Balance, nil
