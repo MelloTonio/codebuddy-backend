@@ -1,6 +1,7 @@
 package mem
 
 import (
+	"database/sql/driver"
 	"time"
 
 	"github.com/mellotonio/desafiogo/app/domain/account"
@@ -103,7 +104,7 @@ func (memoryRepo *memAccountRepo) GetByCPF(cpf string) (account.Account, error) 
 
 }
 
-func (memoryRepo *memAccountRepo) UpdateBalance(_account *account.Account, balance int) error {
+func (memoryRepo *memAccountRepo) UpdateBalance(_account *account.Account) error {
 	if _account.Id == "" {
 		err := errors.ErrEmptyAccountID
 		memoryRepo.log.WithError(err).Error("Empty Account Id")
@@ -117,7 +118,7 @@ func (memoryRepo *memAccountRepo) UpdateBalance(_account *account.Account, balan
 		memoryRepo.log.WithError(err).Error("Account Not Found")
 	}
 
-	memoryRepo.accounts[index].Balance = balance
+	memoryRepo.accounts[index].Balance = _account.Balance
 
 	return nil
 
@@ -171,4 +172,9 @@ func (memoryRepo *memAccountRepo) findByCpf(accountCPF string) int {
 	}
 
 	return -1
+}
+
+func (memoryRepo *memAccountRepo) Transaction(tx driver.Tx) account.Repository {
+	memoryRepo.log.WithField("op", "WithTx").Debug("Error creating a transaction in memory")
+	return memoryRepo
 }
