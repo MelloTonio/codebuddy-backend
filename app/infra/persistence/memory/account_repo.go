@@ -23,7 +23,7 @@ func NewAccountRepository(logger *logrus.Logger) account.Repository {
 
 func (memoryRepo *memAccountRepo) Store(_account *account.Account) error {
 	if _account.Id == "" {
-		err := errors.EmptyAccountID_Err
+		err := errors.ErrEmptyAccountID
 		memoryRepo.log.WithError(err).Error("Empty Account Id")
 		return err
 	}
@@ -31,7 +31,7 @@ func (memoryRepo *memAccountRepo) Store(_account *account.Account) error {
 	index := memoryRepo.findByCpf(_account.Cpf)
 
 	if index != -1 {
-		err := errors.AccountAlreadyExists_Err
+		err := errors.ErrAccountAlreadyExists
 		memoryRepo.log.WithError(err).Error("Account already exists")
 		return err
 	}
@@ -47,7 +47,7 @@ func (memoryRepo *memAccountRepo) Store(_account *account.Account) error {
 
 func (memoryRepo *memAccountRepo) GetById(id string) (account.Account, error) {
 	if id == "" {
-		err := errors.EmptyAccountID_Err
+		err := errors.ErrEmptyAccountID
 		memoryRepo.log.WithError(err).Error("Empty Account Id")
 		return account.Account{}, err
 	}
@@ -55,7 +55,7 @@ func (memoryRepo *memAccountRepo) GetById(id string) (account.Account, error) {
 	index := memoryRepo.find(id)
 
 	if index == -1 {
-		err := errors.AccountNotFound_Err
+		err := errors.ErrAccountNotFound
 		memoryRepo.log.WithError(err).Error("Account not found")
 		return account.Account{}, err
 	}
@@ -66,7 +66,7 @@ func (memoryRepo *memAccountRepo) GetById(id string) (account.Account, error) {
 
 func (memoryRepo *memAccountRepo) ExistsByCPF(_account *account.Account) (bool, error) {
 	if _account.Id == "" {
-		err := errors.EmptyAccountID_Err
+		err := errors.ErrEmptyAccountID
 		memoryRepo.log.WithError(err).Error("Empty Account Id")
 		return true, err
 	}
@@ -75,7 +75,7 @@ func (memoryRepo *memAccountRepo) ExistsByCPF(_account *account.Account) (bool, 
 
 	// If the index is different than -1, the account already exists
 	if index != -1 {
-		err := errors.AccountAlreadyExists_Err
+		err := errors.ErrAccountAlreadyExists
 		memoryRepo.log.WithError(err).Error("Account already exists")
 		return true, nil
 	}
@@ -86,7 +86,7 @@ func (memoryRepo *memAccountRepo) ExistsByCPF(_account *account.Account) (bool, 
 
 func (memoryRepo *memAccountRepo) GetByCPF(cpf string) (account.Account, error) {
 	if cpf == "" {
-		err := errors.EmptyCPF_Err
+		err := errors.ErrEmptyCPF
 		memoryRepo.log.WithError(err).Error("Empty CPF value")
 		return account.Account{}, err
 	}
@@ -94,7 +94,7 @@ func (memoryRepo *memAccountRepo) GetByCPF(cpf string) (account.Account, error) 
 	index := memoryRepo.findByCpf(cpf)
 
 	if index == -1 {
-		err := errors.AccountNotFound_Err
+		err := errors.ErrAccountNotFound
 		memoryRepo.log.WithError(err).Error("Account Not Found")
 		return account.Account{}, err
 	}
@@ -105,7 +105,7 @@ func (memoryRepo *memAccountRepo) GetByCPF(cpf string) (account.Account, error) 
 
 func (memoryRepo *memAccountRepo) UpdateBalance(_account *account.Account, balance int) error {
 	if _account.Id == "" {
-		err := errors.EmptyAccountID_Err
+		err := errors.ErrEmptyAccountID
 		memoryRepo.log.WithError(err).Error("Empty Account Id")
 		return err
 	}
@@ -113,7 +113,7 @@ func (memoryRepo *memAccountRepo) UpdateBalance(_account *account.Account, balan
 	index := memoryRepo.find(_account.Id)
 
 	if index == -1 {
-		err := errors.AccountNotFound_Err
+		err := errors.ErrAccountNotFound
 		memoryRepo.log.WithError(err).Error("Account Not Found")
 	}
 
@@ -125,7 +125,7 @@ func (memoryRepo *memAccountRepo) UpdateBalance(_account *account.Account, balan
 
 func (memoryRepo *memAccountRepo) GetBalance(account account.Account) (int, error) {
 	if account.Id == "" {
-		err := errors.EmptyAccountID_Err
+		err := errors.ErrEmptyAccountID
 		memoryRepo.log.WithError(err).Error("Empty Account Id")
 		return -1, err
 	}
@@ -133,7 +133,7 @@ func (memoryRepo *memAccountRepo) GetBalance(account account.Account) (int, erro
 	index := memoryRepo.find(account.Id)
 
 	if index == -1 {
-		err := errors.AccountNotFound_Err
+		err := errors.ErrAccountNotFound
 		memoryRepo.log.WithError(err).Error("Account Not Found")
 		return -1, err
 	}
