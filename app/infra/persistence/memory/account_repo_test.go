@@ -1,7 +1,6 @@
 package mem
 
 import (
-	"math/rand"
 	"testing"
 	"time"
 
@@ -143,16 +142,15 @@ func TestAccountRepo(t *testing.T) {
 
 		t.Run("account.Repository.UpdateBalance test", func(t *testing.T) {
 			for i, tc := range PassingStoreCases {
-				var fakeBalance int = rand.Intn(10000-1000) + 1000
 
 				t.Log(tc.Case)
-				err := NewMemAccountRepository.UpdateBalance(&PassingStoreCases[i].In, fakeBalance)
+				err := NewMemAccountRepository.UpdateBalance(&PassingStoreCases[i].In)
 				assert.NoError(t, err)
 
 				accounts, err := NewMemAccountRepository.ShowAll()
 				assert.NoError(t, err)
 
-				assert.Equal(t, accounts[i].Balance, fakeBalance)
+				assert.Equal(t, accounts[i].Balance, PassingStoreCases[i].In.Balance)
 			}
 		})
 
