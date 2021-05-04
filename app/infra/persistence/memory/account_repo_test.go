@@ -61,7 +61,7 @@ var FailingStoreCases = []testCaseSingle{
 			Secret:     "secretPass",
 			Created_at: time.Now().Add(3 * time.Hour),
 		},
-		ExpectedError: errors.EmptyAccountID_Err,
+		ExpectedError: errors.ErrEmptyAccountID,
 	},
 	{
 		Case: "Account Not Found",
@@ -73,7 +73,7 @@ var FailingStoreCases = []testCaseSingle{
 			Secret:     "secretPass_2",
 			Created_at: time.Now().Add(10 * time.Hour),
 		},
-		ExpectedError: errors.AccountNotFound_Err,
+		ExpectedError: errors.ErrAccountNotFound,
 	},
 	{
 		Case: "Empty CPF value",
@@ -84,7 +84,7 @@ var FailingStoreCases = []testCaseSingle{
 			Secret:     "12345678933",
 			Created_at: time.Now().Add(10 * time.Hour),
 		},
-		ExpectedError: errors.EmptyCPF_Err,
+		ExpectedError: errors.ErrEmptyCPF,
 	},
 	{
 		Case: "Account already exists",
@@ -96,7 +96,7 @@ var FailingStoreCases = []testCaseSingle{
 			Secret:     "secretPass_2",
 			Created_at: time.Now().Add(10 * time.Hour),
 		},
-		ExpectedError: errors.AccountAlreadyExists_Err,
+		ExpectedError: errors.ErrAccountAlreadyExists,
 	},
 }
 
@@ -197,7 +197,7 @@ func TestAccountRepo(t *testing.T) {
 			err = NewMemAccountRepository.Store(&FailingStoreCases[3].In)
 
 			if assert.Error(t, err) {
-				assert.Equal(t, errors.AccountAlreadyExists_Err, err)
+				assert.Equal(t, errors.ErrAccountAlreadyExists, err)
 			}
 
 		})
@@ -210,14 +210,14 @@ func TestAccountRepo(t *testing.T) {
 			_, err := NewMemAccountRepository.GetById(FailingStoreCases[1].In.Id)
 
 			if assert.Error(t, err) {
-				assert.Equal(t, errors.AccountNotFound_Err, err)
+				assert.Equal(t, errors.ErrAccountNotFound, err)
 			}
 
 			// Search for a account with a invalid Id
 			_, err = NewMemAccountRepository.GetById("")
 
 			if assert.Error(t, err) {
-				assert.Equal(t, errors.EmptyAccountID_Err, err)
+				assert.Equal(t, errors.ErrEmptyAccountID, err)
 			}
 
 		})
@@ -228,14 +228,14 @@ func TestAccountRepo(t *testing.T) {
 			_, err := NewMemAccountRepository.GetByCPF(FailingStoreCases[2].In.Cpf)
 
 			if assert.Error(t, err) {
-				assert.Equal(t, errors.EmptyCPF_Err, err)
+				assert.Equal(t, errors.ErrEmptyCPF, err)
 			}
 
 			// Search for a account that doesn't exist
 			_, err = NewMemAccountRepository.GetByCPF(FailingStoreCases[1].In.Cpf)
 
 			if assert.Error(t, err) {
-				assert.Equal(t, errors.AccountNotFound_Err, err)
+				assert.Equal(t, errors.ErrAccountNotFound, err)
 			}
 
 		})
@@ -246,7 +246,7 @@ func TestAccountRepo(t *testing.T) {
 			_, err := NewMemAccountRepository.ExistsByCPF(&FailingStoreCases[0].In)
 
 			if assert.Error(t, err) {
-				assert.Equal(t, errors.EmptyAccountID_Err, err)
+				assert.Equal(t, errors.ErrEmptyAccountID, err)
 			}
 
 		})
