@@ -14,4 +14,5 @@ var (
 	ErrEmptyCPF             = fmt.Errorf("%w: %v", ErrDomain, "CPF cannot be empty")
 	ErrAccountAlreadyExists = fmt.Errorf("%w: %v", ErrDomain, "Account already exists")
 	ErrTransferNotFound     = fmt.Errorf("%w: %v", ErrDomain, "Transfer not found")
+	ErrInsufficienteBalance = fmt.Errorf("%w: %v", ErrDomain, "Insuficient balance")
 )
