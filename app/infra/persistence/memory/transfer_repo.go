@@ -1,6 +1,7 @@
 package mem
 
 import (
+	"database/sql/driver"
 	"time"
 
 	"github.com/mellotonio/desafiogo/app/domain/errors"
@@ -89,4 +90,9 @@ func (memoryRepo *memTransferRepo) find(id string) int {
 	}
 
 	return -1
+}
+
+func (memoryRepo *memTransferRepo) Transaction(tx driver.Tx) transfer.Repository {
+	memoryRepo.log.WithField("op", "WithTx").Debug("Error creating a transaction in memory")
+	return memoryRepo
 }
