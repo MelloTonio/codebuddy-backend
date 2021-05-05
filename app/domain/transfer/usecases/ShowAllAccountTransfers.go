@@ -1,4 +1,4 @@
-package transferUsecases
+package usecasesTransf
 
 import "github.com/mellotonio/desafiogo/app/domain/transfer"
 

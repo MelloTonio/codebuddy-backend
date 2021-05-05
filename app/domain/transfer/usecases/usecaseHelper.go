@@ -1,10 +1,21 @@
-package transferUsecases
+package usecasesTransf
 
 import (
 	"github.com/mellotonio/desafiogo/app/domain/account"
+	usecasesAcc "github.com/mellotonio/desafiogo/app/domain/account/usecases"
 	"github.com/mellotonio/desafiogo/app/domain/transfer"
 	mem "github.com/mellotonio/desafiogo/app/infra/persistence/memory"
 	"github.com/sirupsen/logrus"
+)
+
+// To be used in tests
+var (
+	newLogrus              = logrus.New()
+	memtransferRepo        = mem.NewTransferRepository(newLogrus)
+	memaccountRepo         = mem.NewAccountRepository(newLogrus)
+	memtransaction         = mem.NewRepositoryTransaction()
+	NewAccountService      = usecasesAcc.NewAccountService(memaccountRepo)
+	NewtransferenceService = NewTransfService(memtransferRepo, memaccountRepo, memtransaction)
 )
 
 type Services struct {
@@ -22,7 +33,7 @@ func NewTransfService(
 
 	return &Services{
 		transfRepo:  TransferRepo,
-		log:         logrus.NewEntry(&logrus.Logger{}),
+		log:         logrus.NewEntry(logrus.New()),
 		accountRepo: AccountRepo,
 		Trx:         mem.NewRepositoryTransaction(),
 	}
