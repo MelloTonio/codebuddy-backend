@@ -2,6 +2,7 @@ package mem
 
 import (
 	"database/sql/driver"
+	"fmt"
 	"time"
 
 	"github.com/mellotonio/desafiogo/app/domain/account"
@@ -28,6 +29,7 @@ func (memoryRepo *memAccountRepo) Store(_account *account.Account) error {
 		memoryRepo.log.WithError(err).Error("Empty Account Id")
 		return err
 	}
+	fmt.Println(_account)
 
 	index := memoryRepo.findByCpf(_account.Cpf)
 
@@ -116,6 +118,7 @@ func (memoryRepo *memAccountRepo) UpdateBalance(_account *account.Account) error
 	if index == -1 {
 		err := errors.ErrAccountNotFound
 		memoryRepo.log.WithError(err).Error("Account Not Found")
+		return err
 	}
 
 	memoryRepo.accounts[index].Balance = _account.Balance
