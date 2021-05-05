@@ -7,7 +7,7 @@ import (
 )
 
 func NewRepositoryTransaction() *MemRepositoryTrx {
-	return &MemRepositoryTrx{log: &logrus.Logger{}}
+	return &MemRepositoryTrx{log: logrus.New()}
 }
 
 type MemRepositoryTrx struct {
