@@ -15,4 +15,6 @@ var (
 	ErrAccountAlreadyExists = fmt.Errorf("%w: %v", ErrDomain, "Account already exists")
 	ErrTransferNotFound     = fmt.Errorf("%w: %v", ErrDomain, "Transfer not found")
 	ErrInsufficienteBalance = fmt.Errorf("%w: %v", ErrDomain, "Insuficient balance")
+	ErrPasswordsDontMatch   = fmt.Errorf("%w: %v", ErrDomain, "Passwords don't match")
+	ErrEmptyAccountSecret   = fmt.Errorf("%w: %v", ErrDomain, "Empty Account Secret")
 )
