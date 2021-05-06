@@ -1,5 +1,5 @@
 package access
 
 type Service interface {
-	Authenticate(Credential) (Description, error)
+	Authenticate(Credential) (string, error)
 }
