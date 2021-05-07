@@ -33,14 +33,11 @@ func (a API) Start() {
 
 	accRepo := mem.NewAccountRepository(logrus.New())
 	accServices := usecasesAcc.NewAccountService(accRepo)
-
-	//router.Use()
 	httpAccount.NewHandler(router, accServices)
 
 	router.Use(httpAccount.NewHandler())
 
-	//	account_handler.NewHandler(v1, a.AccountUseCase)
-	//	auth_handler.NewHandler(v1, a.AuthService)
+
 
 	fmt.Println("Starting api...")
 	//err := http.ListenAndServe(":3000", v1)
