@@ -20,4 +20,5 @@ var (
 	ErrSigningJwt           = fmt.Errorf("%w: %v", ErrDomain, "Error while signing JWT")
 	ErrCreatingAccount      = fmt.Errorf("%w: %v", ErrDomain, "Error while creating account")
 	ErrUpdatingBalance      = fmt.Errorf("%w: %v", ErrDomain, "Error while updating balance")
+	ErrUnauthorized         = fmt.Errorf("%w: %v", ErrDomain, "Unauthorized")
 )
