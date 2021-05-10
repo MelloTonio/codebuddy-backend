@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"os"
 
 	_ "github.com/lib/pq"
 	usecasesAcc "github.com/mellotonio/desafiogo/app/domain/account/usecases"
@@ -13,18 +14,10 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-const (
-	host     = "localhost"
-	port     = "5432"
-	user     = "postgres"
-	password = "postgres"
-	dbname   = "desafiogo"
-)
-
 func main() {
 
 	psqlInfo := fmt.Sprintf("user=%s password=%s host=%s port=%s dbname=%s sslmode=disable",
-		user, password, host, port, dbname)
+		os.Getenv("user"), os.Getenv("password"), os.Getenv("host"), os.Getenv("port"), os.Getenv("dbname"))
 
 	db, err := sql.Open("postgres", psqlInfo)
 
