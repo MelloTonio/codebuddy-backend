@@ -1,7 +1,7 @@
 package httpAccount
 
 import (
-	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/v5"
 	"github.com/mellotonio/desafiogo/app/domain/account"
 )
 
@@ -9,7 +9,7 @@ type AccountHandler struct {
 	service account.Service
 }
 
-func NewHandler(r *chi.Mux, usecase account.Service) *AccountHandler {
+func NewHandler(r chi.Router, usecase account.Service) *AccountHandler {
 
 	h := &AccountHandler{
 		service: usecase,

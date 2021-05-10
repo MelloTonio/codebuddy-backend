@@ -1,7 +1,7 @@
 package httpAuth
 
 import (
-	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/v5"
 	access "github.com/mellotonio/desafiogo/app/domain/authenticate"
 )
 

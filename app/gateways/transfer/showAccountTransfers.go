@@ -3,7 +3,7 @@ package httpTransfer
 import (
 	"net/http"
 
-	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/v5"
 	"github.com/mellotonio/desafiogo/app/gateways/http/response"
 )
 
