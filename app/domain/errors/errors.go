@@ -17,4 +17,5 @@ var (
 	ErrInsufficienteBalance = fmt.Errorf("%w: %v", ErrDomain, "Insuficient balance")
 	ErrPasswordsDontMatch   = fmt.Errorf("%w: %v", ErrDomain, "Passwords don't match")
 	ErrEmptyAccountSecret   = fmt.Errorf("%w: %v", ErrDomain, "Empty Account Secret")
+	ErrSigningJwt           = fmt.Errorf("%w: %v", ErrDomain, "Error while signing JWT")
 )
