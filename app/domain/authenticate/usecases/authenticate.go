@@ -1,4 +1,4 @@
-package authenticationUsecases
+package usecasesAuth
 
 import (
 	"github.com/dgrijalva/jwt-go"
@@ -32,6 +32,12 @@ func (as *accessService) Authenticate(cred access.Credential) (string, error) {
 	at := jwt.NewWithClaims(jwt.SigningMethodHS256, atClaims)
 
 	token, err := at.SignedString([]byte("ASFLZX~Z]325QRAEWZFVSXDCVRAWGF"))
+
+	if err != nil {
+		err := errors.ErrSigningJwt
+		log.WithError(err).Error("Error while signing jwt")
+		return "", err
+	}
 
 	return token, nil
 }
