@@ -15,5 +15,5 @@ func (h AccountHandler) ShowAccounts(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response.JSON(w, http.StatusCreated, ac)
+	response.JSON(w, http.StatusFound, ac)
 }
