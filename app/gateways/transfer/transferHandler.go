@@ -1,7 +1,7 @@
 package httpTransfer
 
 import (
-	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/v5"
 	"github.com/mellotonio/desafiogo/app/domain/transfer"
 )
 
@@ -14,8 +14,8 @@ func NewHandler(r chi.Router, usecase transfer.Service) *TransferHandler {
 		service: usecase,
 	}
 
-	r.Get("/", h.ShowAccountTransfers)
-	r.Post("/{accountDestinationID}", h.Transfer)
+	r.Get("/transfers/{accountID}", h.ShowAccountTransfers)
+	r.Post("/transferTo/{accountDestinationID}", h.Transfer)
 
 	return h
 }
