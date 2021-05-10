@@ -2,15 +2,17 @@ package http
 
 import (
 	"fmt"
+	"log"
+	"net/http"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/mellotonio/desafiogo/app/domain/account"
-	usecasesAcc "github.com/mellotonio/desafiogo/app/domain/account/usecases"
 	access "github.com/mellotonio/desafiogo/app/domain/authenticate"
 	"github.com/mellotonio/desafiogo/app/domain/transfer"
 	httpAccount "github.com/mellotonio/desafiogo/app/gateways/account"
-	mem "github.com/mellotonio/desafiogo/app/infra/persistence/memory"
-	"github.com/sirupsen/logrus"
+	httpAuth "github.com/mellotonio/desafiogo/app/gateways/auth"
+	httpTransfer "github.com/mellotonio/desafiogo/app/gateways/transfer"
 )
 
 // Presentation layer depends on Account, Transfer, Auth services
@@ -20,7 +22,7 @@ type API struct {
 	AuthService     access.Service
 }
 
-func newApi(AccountService account.Service, TransferService transfer.Service, AuthService access.Service) *API {
+func NewApi(AccountService account.Service, TransferService transfer.Service, AuthService access.Service) *API {
 	return &API{
 		AccountService:  AccountService,
 		TransferService: TransferService,
@@ -28,18 +30,23 @@ func newApi(AccountService account.Service, TransferService transfer.Service, Au
 	}
 }
 
-func (a API) Start() {
-	router := chi.NewRouter()
+func (api API) Start(host string, port string) {
+	router := chi.NewMux()
 
-	accRepo := mem.NewAccountRepository(logrus.New())
-	accServices := usecasesAcc.NewAccountService(accRepo)
-	httpAccount.NewHandler(router, accServices)
+	// Handlers - Account & Transfer
+	httpAccount.NewHandler(router, api.AccountService)
+	httpTransfer.NewHandler(router, api.TransferService)
+	httpAuth.NewHandler(router, api.AuthService)
 
-	router.Use(httpAccount.NewHandler())
+	applicationPort := fmt.Sprintf("%s:%s", host, port)
 
-
+	server := &http.Server{
+		Handler:      router,
+		Addr:         applicationPort,
+		WriteTimeout: 10 * time.Second,
+		ReadTimeout:  10 * time.Second,
+	}
 
 	fmt.Println("Starting api...")
-	//err := http.ListenAndServe(":3000", v1)
-	//log.Println(err)
+	log.Fatal(server.ListenAndServe())
 }
