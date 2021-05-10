@@ -35,7 +35,7 @@ func (repo accountRepository) Store(account *account.Account) error {
 	}
 
 	stmt := `
-		INSERT INTO account
+		INSERT INTO accounts
 			(	id,
 				name,
 				cpf,
@@ -92,7 +92,7 @@ func (repo accountRepository) GetBalance(acc account.Account) (int, error) {
 	SELECT
 		balance
 	FROM
-		account
+		accounts
 	WHERE
 		id=$1`
 
@@ -169,7 +169,7 @@ func (repo accountRepository) GetById(accId string) (account.Account, error) {
 			balance,
 			created_at
 		FROM
-			account
+			accounts
 		WHERE
 			id=$1`
 
@@ -207,7 +207,7 @@ func (repo accountRepository) GetByCPF(accCPF string) (account.Account, error) {
 			balance,
 			created_at
 		FROM
-			account
+			accounts
 		WHERE
 			cpf=$1`
 
@@ -239,7 +239,7 @@ func (repo accountRepository) ExistsByCPF(acc *account.Account) (bool, error) {
 			balance,
 			created_at
 		FROM
-			account
+			accounts
 		WHERE
 			cpf=$1`
 
