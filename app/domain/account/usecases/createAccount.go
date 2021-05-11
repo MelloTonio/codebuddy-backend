@@ -17,7 +17,7 @@ func (accSvc *Services) CreateAccount(acc *account.Account) error {
 	accSvc.log.WithField("op", "CreateAccount")
 
 	// ToDo: VALIDATION ON ACCOUNT STRUCT
-	if len(acc.Secret) == 0 {
+	if len(acc.Secret) < 5 {
 		err := errors.ErrEmptyAccountSecret
 		accSvc.log.WithError(err).WithField("Account Secret", acc.Id).Error("Account secret cannot be empty")
 		return err
