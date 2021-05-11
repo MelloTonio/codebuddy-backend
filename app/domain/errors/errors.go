@@ -5,7 +5,6 @@ import (
 	"fmt"
 )
 
-// Domain errors.
 var (
 	ErrDomain               = errors.New("domain Error")
 	ErrEmptyAccountID       = fmt.Errorf("%w: %v", ErrDomain, "Id cannot be Empty")
@@ -21,4 +20,5 @@ var (
 	ErrCreatingAccount      = fmt.Errorf("%w: %v", ErrDomain, "Error while creating account")
 	ErrUpdatingBalance      = fmt.Errorf("%w: %v", ErrDomain, "Error while updating balance")
 	ErrUnauthorized         = fmt.Errorf("%w: %v", ErrDomain, "Unauthorized")
+	ErrNegativeAmount       = fmt.Errorf("%w: %v", ErrDomain, "Negative amount")
 )
