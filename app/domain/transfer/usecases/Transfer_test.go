@@ -39,10 +39,23 @@ func TestTransfer(t *testing.T) {
 
 		accounts, err := NewAccountService.ShowAccounts()
 
+		assert.NoError(t, err)
+
 		assert.NotEqual(t, accounts[0].Balance, 5000)
 		assert.NotEqual(t, accounts[1].Balance, 3000)
 
 		assert.Equal(t, accounts[0].Balance, 3000)
 		assert.Equal(t, accounts[1].Balance, 5000)
+	})
+
+	t.Run("Transfer with negative values", func(t *testing.T) {
+
+		for _, v := range PassingStoreCases {
+			NewAccountService.CreateAccount(&v)
+		}
+
+		_, err := NewtransferenceService.Transfer(PassingStoreCases[0].Id, PassingStoreCases[1].Id, -2000)
+		assert.Error(t, err)
+
 	})
 }
