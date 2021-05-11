@@ -69,7 +69,7 @@ func (repo accountRepository) UpdateBalance(acc *account.Account) error {
 	WHERE
 		id = $2`
 
-	_, err := repo.DB.Exec(stmt, 1, acc.Balance, acc.Id)
+	_, err := repo.DB.Exec(stmt, acc.Balance, acc.Id)
 
 	if err != nil {
 		err := errors.ErrUpdatingBalance
@@ -204,6 +204,7 @@ func (repo accountRepository) GetByCPF(accCPF string) (account.Account, error) {
 			id,
 			name,
 			cpf,
+			secret,
 			balance,
 			created_at
 		FROM
@@ -217,6 +218,7 @@ func (repo accountRepository) GetByCPF(accCPF string) (account.Account, error) {
 		&acc.Id,
 		&acc.Name,
 		&acc.Cpf,
+		&acc.Secret,
 		&acc.Balance,
 		&acc.Created_at,
 	)
