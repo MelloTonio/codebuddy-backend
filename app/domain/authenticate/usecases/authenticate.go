@@ -1,6 +1,8 @@
 package usecasesAuth
 
 import (
+	"os"
+
 	"github.com/dgrijalva/jwt-go"
 	access "github.com/mellotonio/desafiogo/app/domain/authenticate"
 	"github.com/mellotonio/desafiogo/app/domain/errors"
@@ -31,7 +33,7 @@ func (as *accessService) Authenticate(cred access.Credential) (string, error) {
 
 	at := jwt.NewWithClaims(jwt.SigningMethodHS256, atClaims)
 
-	token, err := at.SignedString([]byte("ASFLZX~Z]325QRAEWZFVSXDCVRAWGF"))
+	token, err := at.SignedString([]byte(os.Getenv("JWT_SECRET")))
 
 	if err != nil {
 		log.WithError(err).Error("Error while signing jwt")
