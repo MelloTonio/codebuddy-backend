@@ -21,7 +21,7 @@ func (h AccountHandler) CreateAccount(w http.ResponseWriter, r *http.Request) {
 		Name:    accountBody.Name,
 		Cpf:     accountBody.Cpf,
 		Secret:  accountBody.Secret,
-		Balance: 0,
+		Balance: 6000,
 	})
 
 	if err != nil {
