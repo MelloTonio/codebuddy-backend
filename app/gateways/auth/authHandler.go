@@ -14,7 +14,7 @@ func NewHandler(r chi.Router, usecase access.Service) *AuthHandler {
 		service: usecase,
 	}
 
-	r.Get("/", h.Login)
+	r.Post("/accounts/login", h.Login)
 
 	return h
 }
