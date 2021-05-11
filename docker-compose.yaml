@@ -14,5 +14,19 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  api:
+    container_name: desafiogo_api
+    tty: true
+    build: .  
+    ports:
+      - 3001:3001
+    restart: always
+    environment:  
+      DATABASE_NAME: desafiogo
+      DATABASE_HOST_DIRECT: desafiogo
+      HOSTNAME: desafiogo
+    
 volumes:
         postgres_data:
+
+          
