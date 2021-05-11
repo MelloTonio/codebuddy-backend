@@ -3,7 +3,9 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"os"
 
+	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	usecasesAcc "github.com/mellotonio/desafiogo/app/domain/account/usecases"
 	usecasesAuth "github.com/mellotonio/desafiogo/app/domain/authenticate/usecases"
@@ -15,8 +17,14 @@ import (
 )
 
 func main() {
+	godotenv.Load("../../.env.example")
+
 	psqlInfo := fmt.Sprintf("user=%s password=%s host=%s port=%s dbname=%s sslmode=disable",
-		"postgres", "postgres", "localhost", "5432", "desafiogo")
+		os.Getenv("DB_USER"),
+		os.Getenv("DB_PASSWORD"),
+		os.Getenv("HOST"),
+		os.Getenv("PORT"),
+		os.Getenv("DB_NAME"))
 
 	db, err := sql.Open("postgres", psqlInfo)
 
@@ -39,7 +47,7 @@ func main() {
 	// Repositories
 	accRepo := postgres.NewAccountRepository(db, log)
 	transfRepo := postgres.NewTransferRepository(db, log)
-	trxRepo := mem.NewRepositoryTransaction() // ToDo: postgres trx repo
+	trxRepo := mem.NewRepositoryTransaction()
 
 	// Services
 	accountServices := usecasesAcc.NewAccountService(accRepo)
