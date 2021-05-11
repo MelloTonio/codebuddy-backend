@@ -49,5 +49,5 @@ func main() {
 	// API init
 	API := http.NewApi(accountServices, transferServices, authServices)
 
-	API.Start("0.0.0.0", "3000")
+	API.Start("0.0.0.0", "3001")
 }

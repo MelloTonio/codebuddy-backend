@@ -63,20 +63,26 @@ func (repo transferRepository) Store(transf *transfer.Transfer) error {
 
 func (repo transferRepository) ListByAccId(accID string) ([]transfer.Transfer, error) {
 	const query = `
-	SELECT
+	SELECT 
 		id,
 		account_origin_id,
 		account_destination_id,
 		amount,
 		created_at
-	FROM
-		transfer
-	ORDER BY
-		created_at
-	`
+	FROM 
+		transfers
+	WHERE account_origin_id=$1 OR account_destination_id=$1`
+
 	transfers := []transfer.Transfer{}
 
-	rows, err := repo.DB.QueryContext(context.Background(), query)
+	rows, err := repo.DB.QueryContext(context.Background(), query, accID)
+
+	if err != nil {
+		repo.log.WithError(err).Error("error while getting transfers (by id)")
+		return []transfer.Transfer{}, err
+	}
+
+	defer rows.Close()
 
 	for rows.Next() {
 		var tempTransf transfer.Transfer
