@@ -1,6 +1,5 @@
 -- +goose Up
 -- +goose StatementBegin
-SELECT 'up SQL query';
 
 CREATE TABLE IF NOT EXISTS accounts
 (
@@ -17,6 +16,7 @@ CREATE TABLE IF NOT EXISTS accounts
 
 -- +goose Down
 -- +goose StatementBegin
-SELECT 'down SQL query';
+
 DROP TABLE IF EXISTS accounts CASCADE;
+
 -- +goose StatementEnd
