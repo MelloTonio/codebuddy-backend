@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/go-chi/chi/v5"
 	"github.com/mellotonio/desafiogo/app/domain/errors"
 	"github.com/mellotonio/desafiogo/app/gateways/http/response"
 	"github.com/mellotonio/desafiogo/app/infra/utils"
@@ -20,8 +19,8 @@ func (h TransferHandler) Transfer(w http.ResponseWriter, r *http.Request) {
 		response.Error(w, http.StatusUnauthorized, err)
 	}
 
-	accountDestinationID := chi.URLParam(r, "accountID_destination")
-	amount := chi.URLParam(r, "amount")
+	accountDestinationID := r.URL.Query().Get("accountID_destination")
+	amount := r.URL.Query().Get("amount")
 
 	amountInt, err := strconv.Atoi(amount)
 

@@ -15,7 +15,9 @@ func NewHandler(r chi.Router, usecase transfer.Service) *TransferHandler {
 	}
 
 	r.Get("/transfers/{accountID}", h.ShowAccountTransfers)
-	r.Post("/transferTo/{accountDestinationID}", h.Transfer)
+
+	// Example: /transferTo?accountID_destination=xyz&amount=50
+	r.Post("/transferTo", h.Transfer)
 
 	return h
 }
