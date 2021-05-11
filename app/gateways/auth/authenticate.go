@@ -10,7 +10,7 @@ import (
 func (h AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	var accessCredential access.Credential
 
-	err := response.Decode(r, accessCredential)
+	err := response.Decode(r, &accessCredential)
 
 	if err != nil {
 		response.Error(w, http.StatusUnauthorized, err)
