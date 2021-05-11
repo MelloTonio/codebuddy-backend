@@ -7,6 +7,12 @@ import (
 
 func (transfSvc *Services) Transfer(Account_origin_id string, Account_destination_id string, amount int) (transfer.Transfer, error) {
 
+	if amount < 1 {
+		err := errors.ErrNegativeAmount
+		transfSvc.log.WithError(err).Error("Amount cannot < 1")
+		return transfer.Transfer{}, err
+	}
+
 	accountRepo := transfSvc.accountRepo
 
 	origin_Account, err := accountRepo.GetById(Account_origin_id)
