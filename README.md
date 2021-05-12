@@ -17,6 +17,13 @@
 
 ### Accounts
  - POST `{{base_url}}/accounts/create` -  Create one account in the database
+```go
+{
+	Name       string    `json:"name"`
+	Cpf        string    `json:"cpf"`
+	Secret     string    `json:"secret"`
+}
+```
  - GET `{{base_url}}/accounts/{accountID}` - Get one account by ID
  - GET `{{base_url}}/accounts/all` - List all accounts
  
@@ -26,5 +33,11 @@
 
 ### Auth
 - POST `{{base_url}}/accounts/login` - Authenticate the account and returns JWT token
+```go
+{
+	Cpf        string    `json:"cpf"`
+	Secret     string    `json:"secret"`
+}
+```
 
 
