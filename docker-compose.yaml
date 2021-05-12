@@ -22,9 +22,12 @@ services:
       - 3001:3001
     restart: always
     environment:  
+      DB_USER: postgres
+      DB_PASSWORD: postgres
       DATABASE_NAME: desafiogo
       DATABASE_HOST_DIRECT: desafiogo
       HOSTNAME: desafiogo
+      PORT: 5432
     
 volumes:
         postgres_data:
