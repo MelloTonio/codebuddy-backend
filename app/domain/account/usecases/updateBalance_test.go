@@ -1,4 +1,4 @@
-package usecasesAcc
+package accountUsecases
 
 import (
 	"testing"
