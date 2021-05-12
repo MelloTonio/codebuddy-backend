@@ -1,4 +1,4 @@
-package usecasesAuth
+package authUsecases
 
 import (
 	"github.com/mellotonio/desafiogo/app/domain/account"

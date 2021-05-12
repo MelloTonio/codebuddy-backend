@@ -9,6 +9,7 @@ type AuthHandler struct {
 	service access.Service
 }
 
+// Auth routes
 func NewHandler(r chi.Router, usecase access.Service) *AuthHandler {
 	h := &AuthHandler{
 		service: usecase,

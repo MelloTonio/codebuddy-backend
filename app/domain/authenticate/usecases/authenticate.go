@@ -1,4 +1,4 @@
-package usecasesAuth
+package authUsecases
 
 import (
 	"os"
