@@ -1,4 +1,4 @@
-package usecasesTransf
+package TransferUsecases
 
 import (
 	"testing"

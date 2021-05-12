@@ -9,6 +9,7 @@ type TransferHandler struct {
 	service transfer.Service
 }
 
+// Transfer routes
 func NewHandler(r chi.Router, usecase transfer.Service) *TransferHandler {
 	h := &TransferHandler{
 		service: usecase,

@@ -1,8 +1,8 @@
-package usecasesTransf
+package TransferUsecases
 
 import (
 	"github.com/mellotonio/desafiogo/app/domain/account"
-	usecasesAcc "github.com/mellotonio/desafiogo/app/domain/account/usecases"
+	accountUsecases "github.com/mellotonio/desafiogo/app/domain/account/usecases"
 	"github.com/mellotonio/desafiogo/app/domain/transfer"
 	mem "github.com/mellotonio/desafiogo/app/infra/persistence/memory"
 	"github.com/sirupsen/logrus"
@@ -14,7 +14,7 @@ var (
 	memtransferRepo        = mem.NewTransferRepository(newLogrus)
 	memaccountRepo         = mem.NewAccountRepository(newLogrus)
 	memtransaction         = mem.NewRepositoryTransaction()
-	NewAccountService      = usecasesAcc.NewAccountService(memaccountRepo)
+	NewAccountService      = accountUsecases.NewAccountService(memaccountRepo)
 	NewtransferenceService = NewTransfService(memtransferRepo, memaccountRepo, memtransaction)
 )
 

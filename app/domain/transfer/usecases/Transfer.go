@@ -1,4 +1,4 @@
-package usecasesTransf
+package TransferUsecases
 
 import (
 	"github.com/mellotonio/desafiogo/app/domain/errors"
