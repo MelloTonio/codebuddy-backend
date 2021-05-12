@@ -1,4 +1,4 @@
-package usecasesAcc
+package accountUsecases
 
 import "github.com/mellotonio/desafiogo/app/domain/account"
 

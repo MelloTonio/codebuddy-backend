@@ -9,6 +9,7 @@ type AccountHandler struct {
 	service account.Service
 }
 
+// Account routes
 func NewHandler(r chi.Router, usecase account.Service) *AccountHandler {
 
 	h := &AccountHandler{

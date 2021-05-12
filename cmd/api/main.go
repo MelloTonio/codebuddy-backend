@@ -7,9 +7,9 @@ import (
 
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
-	usecasesAcc "github.com/mellotonio/desafiogo/app/domain/account/usecases"
-	usecasesAuth "github.com/mellotonio/desafiogo/app/domain/authenticate/usecases"
-	usecasesTransf "github.com/mellotonio/desafiogo/app/domain/transfer/usecases"
+	accountUsecases "github.com/mellotonio/desafiogo/app/domain/account/usecases"
+	authUsecases "github.com/mellotonio/desafiogo/app/domain/authenticate/usecases"
+	TransferUsecases "github.com/mellotonio/desafiogo/app/domain/transfer/usecases"
 	"github.com/mellotonio/desafiogo/app/gateways/http"
 	mem "github.com/mellotonio/desafiogo/app/infra/persistence/memory"
 	"github.com/mellotonio/desafiogo/app/infra/persistence/postgres"
@@ -50,9 +50,9 @@ func main() {
 	trxRepo := mem.NewRepositoryTransaction()
 
 	// Services
-	accountServices := usecasesAcc.NewAccountService(accRepo)
-	transferServices := usecasesTransf.NewTransfService(transfRepo, accRepo, trxRepo)
-	authServices := usecasesAuth.NewAccessService(accRepo)
+	accountServices := accountUsecases.NewAccountService(accRepo)
+	transferServices := TransferUsecases.NewTransfService(transfRepo, accRepo, trxRepo)
+	authServices := authUsecases.NewAccessService(accRepo)
 
 	// API init
 	API := http.NewApi(accountServices, transferServices, authServices)
