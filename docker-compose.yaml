@@ -30,6 +30,4 @@ services:
       PORT: 5432
     
 volumes:
-        postgres_data:
-
-          
+      postgres_data:

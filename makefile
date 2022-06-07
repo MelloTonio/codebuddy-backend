@@ -2,7 +2,7 @@ migrateup:
 	goose -dir ./app/infra/persistence/postgres/migrations postgres "user=postgres dbname=desafiogo password=postgres sslmode=disable" up	
 
 migratedown:
-	goose -dir ./app/infra/persistence/postgres/migrations postgres "user=postgres dbname=desafiogo password=postgres sslmode=disable" down	
+	goose -dir ./app/infra/persistence/postgres/migrations postgres "user=postgres dbname=projeto_as password=postgres sslmode=disable" down	
 
 test-coverage:
 	@echo "==> Checking test coverage..."

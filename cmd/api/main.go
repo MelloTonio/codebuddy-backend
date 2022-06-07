@@ -3,12 +3,14 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"os"
 
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	accountUsecases "github.com/mellotonio/desafiogo/app/domain/account/usecases"
 	authUsecases "github.com/mellotonio/desafiogo/app/domain/authenticate/usecases"
+	cardUsecases "github.com/mellotonio/desafiogo/app/domain/card/usecases"
+	deckUsecases "github.com/mellotonio/desafiogo/app/domain/deck/usecases"
+
 	TransferUsecases "github.com/mellotonio/desafiogo/app/domain/transfer/usecases"
 	"github.com/mellotonio/desafiogo/app/gateways/http"
 	mem "github.com/mellotonio/desafiogo/app/infra/persistence/memory"
@@ -17,14 +19,14 @@ import (
 )
 
 func main() {
-	godotenv.Load("../../.env.example")
+	godotenv.Load("../../.env")
 
 	psqlInfo := fmt.Sprintf("user=%s password=%s host=%s port=%s dbname=%s sslmode=disable",
-		os.Getenv("DB_USER"),
-		os.Getenv("DB_PASSWORD"),
-		os.Getenv("DATABASE_NAME"),
-		os.Getenv("PORT"),
-		os.Getenv("DATABASE_NAME"))
+		"postgres",
+		"postgres",
+		"desafiogo",
+		"5432",
+		"desafiogo")
 
 	db, err := sql.Open("postgres", psqlInfo)
 
@@ -48,14 +50,43 @@ func main() {
 	accRepo := postgres.NewAccountRepository(db, log)
 	transfRepo := postgres.NewTransferRepository(db, log)
 	trxRepo := mem.NewRepositoryTransaction()
+	deckRepo := postgres.NewDeckRepository(db, log)
+	cardRepo := postgres.NewCardRepository(db, log)
 
 	// Services
+	deckServices := deckUsecases.NewDeckUsecase(deckRepo, cardRepo)
 	accountServices := accountUsecases.NewAccountService(accRepo)
 	transferServices := TransferUsecases.NewTransfService(transfRepo, accRepo, trxRepo)
 	authServices := authUsecases.NewAccessService(accRepo)
+	cardServices := cardUsecases.NewCardUsecase(cardRepo)
 
 	// API init
-	API := http.NewApi(accountServices, transferServices, authServices)
+	API := http.NewApi(accountServices, transferServices, authServices, deckServices, cardServices)
 
 	API.Start("0.0.0.0", "3001")
 }
+
+/*
+docker-compose up --build
+
+
+
+[{
+    "owner":"567ce3f4-58e2-4bfd-b088-90f4ac2c056e",
+    "question":"who is more fuck",
+    "answer":"tefao"
+},
+{
+    "owner":"567ce3f4-58e2-4bfd-b088-90f4ac2c056e",
+    "question":"teste",
+    "answer":"teste"
+},
+{
+    "owner":"567ce3f4-58e2-4bfd-b088-90f4ac2c056e",
+    "question":"teste",
+    "answer":"teste"
+}
+
+
+]
+*/

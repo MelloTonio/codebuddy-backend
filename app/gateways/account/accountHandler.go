@@ -16,7 +16,7 @@ func NewHandler(r chi.Router, usecase account.Service) *AccountHandler {
 		service: usecase,
 	}
 
-	r.Post("/accounts/create", h.CreateAccount)
+	r.Post("/accounts/creaddte", h.CreateAccount)
 	r.Get("/accounts/{accountID}", h.GetAccount)
 	r.Get("/accounts/all", h.ShowAccounts)
 

@@ -9,10 +9,11 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/mellotonio/desafiogo/app/domain/account"
 	access "github.com/mellotonio/desafiogo/app/domain/authenticate"
+	"github.com/mellotonio/desafiogo/app/domain/card"
+	"github.com/mellotonio/desafiogo/app/domain/deck"
 	"github.com/mellotonio/desafiogo/app/domain/transfer"
-	httpAccount "github.com/mellotonio/desafiogo/app/gateways/account"
-	httpAuth "github.com/mellotonio/desafiogo/app/gateways/auth"
-	httpTransfer "github.com/mellotonio/desafiogo/app/gateways/transfer"
+	httpCards "github.com/mellotonio/desafiogo/app/gateways/card"
+	httpDeck "github.com/mellotonio/desafiogo/app/gateways/decks"
 )
 
 // Presentation layer depends on Account, Transfer, Auth services
@@ -20,13 +21,17 @@ type API struct {
 	AccountService  account.Service
 	TransferService transfer.Service
 	AuthService     access.Service
+	DeckService     deck.Usecase
+	CardService     card.Usecase
 }
 
-func NewApi(AccountService account.Service, TransferService transfer.Service, AuthService access.Service) *API {
+func NewApi(AccountService account.Service, TransferService transfer.Service, AuthService access.Service, DeckService deck.Usecase, CardService card.Usecase) *API {
 	return &API{
 		AccountService:  AccountService,
 		TransferService: TransferService,
 		AuthService:     AuthService,
+		DeckService:     DeckService,
+		CardService:     CardService,
 	}
 }
 
@@ -34,9 +39,8 @@ func (api API) Start(host string, port string) {
 	router := chi.NewMux()
 
 	// Handlers - Account & Transfer
-	httpAccount.NewHandler(router, api.AccountService)
-	httpTransfer.NewHandler(router, api.TransferService)
-	httpAuth.NewHandler(router, api.AuthService)
+	httpDeck.NewHandler(router, api.DeckService)
+	httpCards.NewHandler(router, api.CardService)
 
 	applicationPort := fmt.Sprintf("%s:%s", host, port)
 
