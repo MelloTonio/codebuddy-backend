@@ -7,6 +7,7 @@ import (
 	"fmt"
 
 	"github.com/mellotonio/desafiogo/app/domain/card"
+	"github.com/mellotonio/desafiogo/app/domain/errors"
 	"github.com/sirupsen/logrus"
 )
 
@@ -30,7 +31,7 @@ func (repo cardRepository) Store(Card *card.Card) error {
 		INSERT INTO cards
 			(	
 			  deck_holder,
-			  owner_id,
+			  user_id,
 			  question,
 		      answer
 			)
@@ -44,6 +45,78 @@ func (repo cardRepository) Store(Card *card.Card) error {
 
 	if err != nil {
 		repo.log.WithError(err).Error("Error while creating card")
+		return err
+	}
+
+	return nil
+}
+
+func (repo cardRepository) GetAllCards(userID string) ([]card.Card, error) {
+	cardArr := []card.Card{}
+
+	stmt := `
+		SELECT 
+			id,
+			question,
+			answer
+		from cards WHERE user_id=$1`
+
+	rows, err := repo.DB.QueryContext(context.Background(), stmt, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var tempCard card.Card
+
+		err = rows.Scan(
+			&tempCard.Id,
+			&tempCard.Question,
+			&tempCard.Answer,
+		)
+
+		if err != nil {
+			repo.log.WithError(err).Error("error while getting cards (by id)")
+			if err == sql.ErrNoRows {
+				err = errors.ErrAccountNotFound
+			}
+			return nil, err
+		}
+
+		cardArr = append(cardArr, tempCard)
+	}
+
+	if err != nil {
+		repo.log.WithError(err).Error("Error to get card")
+		return nil, err
+	}
+
+	return cardArr, nil
+}
+
+func (repo cardRepository) Delete(cardID string) error {
+	stmt := `
+		DELETE from cards where id = $1`
+
+	_, err := repo.DB.Exec(stmt,
+		cardID,
+	)
+
+	if err != nil {
+		repo.log.WithError(err).Error("Error while deleting deck")
+		return err
+	}
+
+	return nil
+}
+
+func (repo cardRepository) TradeCard(card, cardOwner, cardReceiver string) error {
+	stmt := `UPDATE cards SET user_id = $1 where id = $2`
+
+	_, err := repo.DB.Exec(stmt, cardReceiver, card)
+	if err != nil {
+		repo.log.WithError(err).Error("Error while trading card")
 		return err
 	}
 

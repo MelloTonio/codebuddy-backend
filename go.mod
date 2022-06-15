@@ -12,6 +12,7 @@ require (
 	github.com/go-bindata/go-bindata v3.1.2+incompatible // indirect
 	github.com/go-chi/chi v1.5.4
 	github.com/go-chi/chi/v5 v5.0.3 // indirect
+	github.com/go-chi/cors v1.2.1
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/golang-migrate/migrate v3.5.4+incompatible // indirect
 	github.com/golang-migrate/migrate/v4 v4.14.1

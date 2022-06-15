@@ -8,7 +8,6 @@ import (
 )
 
 func (h AccountHandler) GetAccount(w http.ResponseWriter, r *http.Request) {
-
 	accountID := chi.URLParam(r, "accountID")
 
 	ac, err := h.service.GetAccount(accountID)

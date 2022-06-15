@@ -10,6 +10,7 @@ import (
 	authUsecases "github.com/mellotonio/desafiogo/app/domain/authenticate/usecases"
 	cardUsecases "github.com/mellotonio/desafiogo/app/domain/card/usecases"
 	deckUsecases "github.com/mellotonio/desafiogo/app/domain/deck/usecases"
+	userUsecases "github.com/mellotonio/desafiogo/app/domain/user/usecases"
 
 	TransferUsecases "github.com/mellotonio/desafiogo/app/domain/transfer/usecases"
 	"github.com/mellotonio/desafiogo/app/gateways/http"
@@ -52,6 +53,7 @@ func main() {
 	trxRepo := mem.NewRepositoryTransaction()
 	deckRepo := postgres.NewDeckRepository(db, log)
 	cardRepo := postgres.NewCardRepository(db, log)
+	userRepo := postgres.NewUserRepository(db, log)
 
 	// Services
 	deckServices := deckUsecases.NewDeckUsecase(deckRepo, cardRepo)
@@ -59,9 +61,10 @@ func main() {
 	transferServices := TransferUsecases.NewTransfService(transfRepo, accRepo, trxRepo)
 	authServices := authUsecases.NewAccessService(accRepo)
 	cardServices := cardUsecases.NewCardUsecase(cardRepo)
+	userServices := userUsecases.NewUserUsecase(userRepo)
 
 	// API init
-	API := http.NewApi(accountServices, transferServices, authServices, deckServices, cardServices)
+	API := http.NewApi(accountServices, transferServices, authServices, deckServices, cardServices, userServices)
 
 	API.Start("0.0.0.0", "3001")
 }

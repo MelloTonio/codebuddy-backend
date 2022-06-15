@@ -17,6 +17,9 @@ func NewHandler(r chi.Router, usecase card.Usecase) *CardHandler {
 	}
 
 	r.Post("/cards/create", h.CreateCard)
+	r.Get("/cards", h.GetAllCards)
+	r.Get("/cards/tradeCard", h.TradeCard)
+	r.Delete("/cards", h.DeleteCard)
 
 	return h
 }

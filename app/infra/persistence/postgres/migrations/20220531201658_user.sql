@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS cards
 (
     id uuid primary key default gen_random_uuid(),
 	deck_holder uuid references decks(id),
-	owner_id uuid references owner(id),
+	user_id uuid references users(id),
     question TEXT,
     answer TEXT,
 	created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
