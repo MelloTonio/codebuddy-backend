@@ -5,7 +5,7 @@
 ## Instructions to Run
 
 ### Prod
-- `make runProd` will run the database + api
+- toDo
 
 ### Local
 - Database: `docker-compose up` will start the PostgreSQL DB
