@@ -1,33 +1,23 @@
-version: "3.1"
+
+version: '3.7'
 
 services:
-  desafiogo:
-    container_name: desafiogo
-    image: postgres:13.2-alpine
-    restart: always
-    environment:
-      POSTGRES_DB: desafiogo
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    ports: 
-      - 5432:5432
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
 
-  api:
-    container_name: desafiogo_api
-    tty: true
-    build: .  
-    ports:
-      - 3001:3001
+  mongo:
+    image: mongo
     restart: always
-    environment:  
-      DB_USER: postgres
-      DB_PASSWORD: postgres
-      DATABASE_NAME: desafiogo
-      DATABASE_HOST_DIRECT: desafiogo
-      HOSTNAME: desafiogo
-      PORT: 5432
-    
-volumes:
-      postgres_data:
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    container_name: mongotbp
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: admin

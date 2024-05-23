@@ -1,70 +1,41 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
 
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
-	accountUsecases "github.com/mellotonio/desafiogo/app/domain/account/usecases"
-	authUsecases "github.com/mellotonio/desafiogo/app/domain/authenticate/usecases"
-	cardUsecases "github.com/mellotonio/desafiogo/app/domain/card/usecases"
-	deckUsecases "github.com/mellotonio/desafiogo/app/domain/deck/usecases"
-	userUsecases "github.com/mellotonio/desafiogo/app/domain/user/usecases"
+	localPool "github.com/mellotonio/desafiogo"
 
-	TransferUsecases "github.com/mellotonio/desafiogo/app/domain/transfer/usecases"
+	"github.com/mellotonio/desafiogo/app/domain/studyGroups/services"
 	"github.com/mellotonio/desafiogo/app/gateways/http"
-	mem "github.com/mellotonio/desafiogo/app/infra/persistence/memory"
-	"github.com/mellotonio/desafiogo/app/infra/persistence/postgres"
+	mongodb "github.com/mellotonio/desafiogo/app/infra/persistence/mongoDB"
 	"github.com/sirupsen/logrus"
 )
 
 func main() {
 	godotenv.Load("../../.env")
 
-	psqlInfo := fmt.Sprintf("user=%s password=%s host=%s port=%s dbname=%s sslmode=disable",
-		"postgres",
-		"postgres",
-		"desafiogo",
-		"5432",
-		"desafiogo")
-
-	db, err := sql.Open("postgres", psqlInfo)
-
-	if err != nil {
-		panic(err)
-	}
-
-	defer db.Close()
-
-	err = db.Ping()
-
-	if err != nil {
-		panic(err)
-	}
-
-	fmt.Println("Successfully connected!")
-
 	log := logrus.New()
 
+	db, err := localPool.NewLocalDocDB()
+	if err != nil {
+		log.Errorf("failed to connect to mongodb")
+		panic(err)
+	}
+
+	fmt.Println("Successfully connected!", db.Name())
+
 	// Repositories
-	accRepo := postgres.NewAccountRepository(db, log)
-	transfRepo := postgres.NewTransferRepository(db, log)
-	trxRepo := mem.NewRepositoryTransaction()
-	deckRepo := postgres.NewDeckRepository(db, log)
-	cardRepo := postgres.NewCardRepository(db, log)
-	userRepo := postgres.NewUserRepository(db, log)
+	studyGroupRepo := mongodb.NewStudyGroupRepository(&mongodb.DocDB{
+		Pool: db,
+	})
 
 	// Services
-	deckServices := deckUsecases.NewDeckUsecase(deckRepo, cardRepo)
-	accountServices := accountUsecases.NewAccountService(accRepo)
-	transferServices := TransferUsecases.NewTransfService(transfRepo, accRepo, trxRepo)
-	authServices := authUsecases.NewAccessService(accRepo)
-	cardServices := cardUsecases.NewCardUsecase(cardRepo)
-	userServices := userUsecases.NewUserUsecase(userRepo)
+	studyGroupService := services.NewStudyGroupService(studyGroupRepo)
 
 	// API init
-	API := http.NewApi(accountServices, transferServices, authServices, deckServices, cardServices, userServices)
+	API := http.NewApi(studyGroupService)
 
 	API.Start("0.0.0.0", "3001")
 }
