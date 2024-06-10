@@ -35,7 +35,7 @@ func (sgs *ChallengeService) SolveChallenge(ctx context.Context, challenge chall
 		cmd := exec.Command("flake8", "script.py")
 		errorOutput, _ := cmd.Output()
 		fmt.Println("Error executing command:", string(errorOutput))
-		return "", nil
+		output = errorOutput
 	}
 
 	err = sgs.ChallengeRepository.UpdateChallenge(ctx, challenge)

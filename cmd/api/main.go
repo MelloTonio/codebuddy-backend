@@ -8,6 +8,7 @@ import (
 	localPool "github.com/mellotonio/desafiogo"
 
 	challengeService "github.com/mellotonio/desafiogo/app/domain/challenges/services"
+	profileService "github.com/mellotonio/desafiogo/app/domain/profiles/services"
 	groupService "github.com/mellotonio/desafiogo/app/domain/studyGroups/services"
 	"github.com/mellotonio/desafiogo/app/gateways/http"
 	mongodb "github.com/mellotonio/desafiogo/app/infra/persistence/mongoDB"
@@ -34,13 +35,17 @@ func main() {
 	challengeRepo := mongodb.NewChallengeRepository(&mongodb.DocDB{
 		Pool: db,
 	})
+	profileRepo := mongodb.NewProfileRepository(&mongodb.DocDB{
+		Pool: db,
+	})
 
 	// Services
-	studyGroupService := groupService.NewStudyGroupService(studyGroupRepo)
+	profileService := profileService.NewProfileService(profileRepo)
+	studyGroupService := groupService.NewStudyGroupService(studyGroupRepo, profileService)
 	challengeService := challengeService.NewChallengeService(challengeRepo)
 
 	// API init
-	API := http.NewApi(studyGroupService, challengeService)
+	API := http.NewApi(studyGroupService, challengeService, profileService)
 
 	API.Start("0.0.0.0", "3001")
 }

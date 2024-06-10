@@ -9,8 +9,10 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
 	"github.com/mellotonio/desafiogo/app/domain/challenges"
+	"github.com/mellotonio/desafiogo/app/domain/profiles"
 	studygroups "github.com/mellotonio/desafiogo/app/domain/studyGroups"
 	httpChallenge "github.com/mellotonio/desafiogo/app/gateways/challenges"
+	httpProfile "github.com/mellotonio/desafiogo/app/gateways/profiles"
 	httpStudyGroup "github.com/mellotonio/desafiogo/app/gateways/studyGroups"
 )
 
@@ -18,12 +20,14 @@ import (
 type API struct {
 	StudyGroupService studygroups.Service
 	ChallengeService  challenges.Service
+	ProfileService    profiles.Service
 }
 
-func NewApi(StudyGroupService studygroups.Service, ChallengeService challenges.Service) *API {
+func NewApi(StudyGroupService studygroups.Service, ChallengeService challenges.Service, ProfileService profiles.Service) *API {
 	return &API{
 		StudyGroupService: StudyGroupService,
 		ChallengeService:  ChallengeService,
+		ProfileService:    ProfileService,
 	}
 }
 
@@ -41,6 +45,7 @@ func (api API) Start(host string, port string) {
 		MaxAge:           300, // Maximum value not ignored by any of major browsers
 	}))
 
+	httpProfile.NewHandler(router, api.ProfileService)
 	httpStudyGroup.NewHandler(router, api.StudyGroupService)
 	httpChallenge.NewHandler(router, api.ChallengeService)
 

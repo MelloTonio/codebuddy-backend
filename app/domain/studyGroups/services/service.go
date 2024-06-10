@@ -3,17 +3,20 @@ package services
 import (
 	"context"
 
+	"github.com/mellotonio/desafiogo/app/domain/profiles"
 	studygroups "github.com/mellotonio/desafiogo/app/domain/studyGroups"
 	"github.com/sirupsen/logrus"
 )
 
 type StudyGroupService struct {
+	ProfileService       profiles.Service
 	StudyGroupRepository studygroups.Repository
 }
 
-func NewStudyGroupService(StudyGroupRepository studygroups.Repository) studygroups.Service {
+func NewStudyGroupService(StudyGroupRepository studygroups.Repository, ProfileService profiles.Service) studygroups.Service {
 	return &StudyGroupService{
 		StudyGroupRepository: StudyGroupRepository,
+		ProfileService:       ProfileService,
 	}
 }
 
@@ -21,6 +24,13 @@ func (sgs *StudyGroupService) SaveStudyGroup(ctx context.Context, studyGroup stu
 	err := sgs.StudyGroupRepository.SaveStudyGroup(ctx, studyGroup)
 	if err != nil {
 		panic(err)
+	}
+
+	for _, student := range studyGroup.Students {
+		err := sgs.ProfileService.UpdateProfileByUsername(ctx, student, studyGroup.Name)
+		if err != nil {
+			panic(err)
+		}
 	}
 
 	logrus.Infof(studyGroup.Name)

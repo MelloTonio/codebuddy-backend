@@ -12,6 +12,7 @@ func (h StudyGroupHandler) ListStudentGroups(w http.ResponseWriter, r *http.Requ
 	// Extract studentName from URL path
 	studentName := r.URL.Query().Get("studyGroup")
 
+	logrus.Infof("%s", studentName)
 	studyGroups, err := h.service.ListStudentGroups(context.Background(), studentName)
 	if err != nil {
 		response.Error(w, http.StatusBadRequest, err)
@@ -19,7 +20,6 @@ func (h StudyGroupHandler) ListStudentGroups(w http.ResponseWriter, r *http.Requ
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-
 	logrus.Infof("%+v", studyGroups)
 	response.JSON(w, http.StatusCreated, studyGroups)
 }
