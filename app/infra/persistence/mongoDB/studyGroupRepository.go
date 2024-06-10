@@ -127,6 +127,39 @@ func (rr *StudyGroupRepo) SaveWarning(ctx context.Context, studyGroupName, warnM
 	return nil
 }
 
+func (rr *StudyGroupRepo) ListGroupStudents(ctx context.Context, groupName string) ([]studygroups.StudyGroup, error) {
+	var studyGroups []studygroups.StudyGroup
+
+	// Query to find study groups where the student name is in the "students" array
+	cursor, err := rr.DocDb.Pool.Collection(studyGroupsCollection).Find(ctx, bson.M{
+		"name": groupName,
+	})
+	if err != nil {
+		logrus.Errorf("failed to get study groups: %s", err.Error())
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+
+	for cursor.Next(ctx) {
+		var studyGroup studygroups.StudyGroup
+		err := cursor.Decode(&studyGroup)
+		if err != nil {
+			logrus.Errorf("failed to decode study group: %s", err.Error())
+			return nil, err
+		}
+		studyGroups = append(studyGroups, studyGroup)
+	}
+
+	if err := cursor.Err(); err != nil {
+		logrus.Errorf("cursor error: %s", err.Error())
+		return nil, err
+	}
+
+	logrus.Infof("got %+v", studyGroups)
+
+	return studyGroups, nil
+}
+
 func (rr *StudyGroupRepo) GetWarnings(ctx context.Context, studyGroupName string) ([]string, error) {
 	var studyGroup studygroups.StudyGroup
 

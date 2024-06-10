@@ -7,7 +7,8 @@ import (
 	_ "github.com/lib/pq"
 	localPool "github.com/mellotonio/desafiogo"
 
-	"github.com/mellotonio/desafiogo/app/domain/studyGroups/services"
+	challengeService "github.com/mellotonio/desafiogo/app/domain/challenges/services"
+	groupService "github.com/mellotonio/desafiogo/app/domain/studyGroups/services"
 	"github.com/mellotonio/desafiogo/app/gateways/http"
 	mongodb "github.com/mellotonio/desafiogo/app/infra/persistence/mongoDB"
 	"github.com/sirupsen/logrus"
@@ -30,12 +31,16 @@ func main() {
 	studyGroupRepo := mongodb.NewStudyGroupRepository(&mongodb.DocDB{
 		Pool: db,
 	})
+	challengeRepo := mongodb.NewChallengeRepository(&mongodb.DocDB{
+		Pool: db,
+	})
 
 	// Services
-	studyGroupService := services.NewStudyGroupService(studyGroupRepo)
+	studyGroupService := groupService.NewStudyGroupService(studyGroupRepo)
+	challengeService := challengeService.NewChallengeService(challengeRepo)
 
 	// API init
-	API := http.NewApi(studyGroupService)
+	API := http.NewApi(studyGroupService, challengeService)
 
 	API.Start("0.0.0.0", "3001")
 }

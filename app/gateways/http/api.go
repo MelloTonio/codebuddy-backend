@@ -8,18 +8,22 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
+	"github.com/mellotonio/desafiogo/app/domain/challenges"
 	studygroups "github.com/mellotonio/desafiogo/app/domain/studyGroups"
+	httpChallenge "github.com/mellotonio/desafiogo/app/gateways/challenges"
 	httpStudyGroup "github.com/mellotonio/desafiogo/app/gateways/studyGroups"
 )
 
 // Presentation layer depends on Account, Transfer, Auth services
 type API struct {
 	StudyGroupService studygroups.Service
+	ChallengeService  challenges.Service
 }
 
-func NewApi(StudyGroupService studygroups.Service) *API {
+func NewApi(StudyGroupService studygroups.Service, ChallengeService challenges.Service) *API {
 	return &API{
 		StudyGroupService: StudyGroupService,
+		ChallengeService:  ChallengeService,
 	}
 }
 
@@ -37,8 +41,8 @@ func (api API) Start(host string, port string) {
 		MaxAge:           300, // Maximum value not ignored by any of major browsers
 	}))
 
-	// Handlers - Account & Transfer
 	httpStudyGroup.NewHandler(router, api.StudyGroupService)
+	httpChallenge.NewHandler(router, api.ChallengeService)
 
 	applicationPort := fmt.Sprintf("%s:%s", host, port)
 

@@ -45,6 +45,14 @@ func (sgs *StudyGroupService) ListStudentGroupDetails(ctx context.Context, study
 
 	return studyGroups, nil
 }
+func (sgs *StudyGroupService) ListGroupStudents(ctx context.Context, groupName string) ([]studygroups.StudyGroup, error) {
+	studyGroups, err := sgs.StudyGroupRepository.ListGroupStudents(ctx, groupName)
+	if err != nil {
+		panic(err)
+	}
+
+	return studyGroups, nil
+}
 
 func (sgs *StudyGroupService) SaveWarning(ctx context.Context, studyGroupName, warnMessage string) error {
 	err := sgs.StudyGroupRepository.SaveWarning(ctx, studyGroupName, warnMessage)
