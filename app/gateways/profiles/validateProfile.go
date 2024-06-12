@@ -20,7 +20,7 @@ func (h ProfileHandler) ValidateProfile(w http.ResponseWriter, r *http.Request) 
 	}
 
 	logrus.Infof("%+v", profileBody)
-	err = h.service.ValidateProfile(context.Background(), profiles.Profile{
+	token, err := h.service.ValidateProfile(context.Background(), profiles.Profile{
 		Username:    profileBody.Username,
 		Password:    profileBody.Password,
 		Groups:      profileBody.Groups,
@@ -31,5 +31,5 @@ func (h ProfileHandler) ValidateProfile(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	response.JSON(w, http.StatusOK, profileBody)
+	response.JSON(w, http.StatusOK, token)
 }

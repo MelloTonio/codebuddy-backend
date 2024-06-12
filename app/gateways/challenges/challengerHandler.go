@@ -18,8 +18,9 @@ func NewHandler(r chi.Router, usecase challenges.Service) *ChallengeHandler {
 
 	r.Post("/challenge/solve", h.SolveChallenge)
 	r.Post("/challenge/create", h.CreateChallenge)
+	r.Post("/challenge/update", h.UpdateChallenge)
 	r.Get("/challenges", h.ListChallengesByGroup)
-	r.Get("/challenges", h.ListChallengesByGroup)
+	r.Get("/challenges/solved", h.GetChallengesByProfileAndName)
 
 	return h
 }

@@ -8,7 +8,6 @@ import (
 	"os/exec"
 
 	"github.com/mellotonio/desafiogo/app/domain/challenges"
-	"github.com/sirupsen/logrus"
 )
 
 func (sgs *ChallengeService) SolveChallenge(ctx context.Context, challenge challenges.Challenge) (string, error) {
@@ -36,12 +35,6 @@ func (sgs *ChallengeService) SolveChallenge(ctx context.Context, challenge chall
 		errorOutput, _ := cmd.Output()
 		fmt.Println("Error executing command:", string(errorOutput))
 		output = errorOutput
-	}
-
-	err = sgs.ChallengeRepository.UpdateChallenge(ctx, challenge)
-	if err != nil {
-		logrus.Infof("%+s", err.Error())
-		return "", nil
 	}
 
 	return string(output), nil

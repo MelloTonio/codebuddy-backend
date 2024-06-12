@@ -20,4 +20,10 @@ type (
 		AlumniName string `json:"name" bson:"name"`
 		Text       string `json:"text" bson:"text"`
 	}
+
+	ChallengeByProfile struct {
+		Name    string `json:"name" bson:"name"`
+		Group   string `json:"group" bson:"group"`
+		Profile string `json:"profile" bson:"profile"`
+	}
 )

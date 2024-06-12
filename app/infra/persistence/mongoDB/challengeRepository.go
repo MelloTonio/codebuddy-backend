@@ -94,3 +94,41 @@ func (cr *ChallengeRepo) ListChallengesByGroup(ctx context.Context, groupName st
 
 	return dbChallenges, nil
 }
+
+func (cr *ChallengeRepo) GetChallengesByGroupNameAndAlumni(ctx context.Context, groupName, challengeName, alumniName string) ([]challenges.Challenge, error) {
+	var dbChallenges []challenges.Challenge
+
+	filter := bson.M{
+		"group": groupName,
+		"answer": bson.M{
+			"$elemMatch": bson.M{
+				"name": alumniName, // fixed field name to match the struct
+			},
+		},
+	}
+
+	cursor, err := cr.DocDb.Pool.Collection(challengeCollection).Find(ctx, filter)
+	if err != nil {
+		logrus.Errorf("failed to get challenges: %s", err.Error())
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+
+	for cursor.Next(ctx) {
+		var challenge challenges.Challenge
+		err := cursor.Decode(&challenge)
+		if err != nil {
+			logrus.Errorf("failed to decode challenge: %s", err.Error())
+			return nil, err
+		}
+		dbChallenges = append(dbChallenges, challenge)
+	}
+	if err := cursor.Err(); err != nil {
+		logrus.Errorf("cursor error: %s", err.Error())
+		return nil, err
+	}
+
+	logrus.Infof("got %+v", dbChallenges)
+
+	return dbChallenges, nil
+}
