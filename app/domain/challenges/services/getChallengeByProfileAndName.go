@@ -11,5 +11,6 @@ func (sgs *ChallengeService) GetChallengesByGroupNameAndAlumni(ctx context.Conte
 	if err != nil {
 		return nil, err
 	}
+
 	return challenges, nil
 }

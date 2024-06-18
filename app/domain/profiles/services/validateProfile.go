@@ -11,7 +11,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-var secretKey = []byte("beniciogay")
+var secretKey = "beniciogay"
 
 func createToken(username, profile_type string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256,
@@ -21,7 +21,7 @@ func createToken(username, profile_type string) (string, error) {
 			"exp":          time.Now().Add(time.Hour * 24).Unix(),
 		})
 
-	tokenString, err := token.SignedString(secretKey)
+	tokenString, err := token.SignedString([]byte(secretKey))
 	if err != nil {
 		return "", err
 	}
