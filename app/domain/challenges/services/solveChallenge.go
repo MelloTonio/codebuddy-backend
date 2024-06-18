@@ -53,7 +53,7 @@ func (sgs *ChallengeService) SolveChallenge(ctx context.Context, challenge chall
 
 func callChatGPTAPI(answerText, errorOutput string) (string, error) {
 	apiURL := "https://api.openai.com/v1/chat/completions"
-	apiKey := "sk-proj-AnZRrGIjxPr2iddzcMEpT3BlbkFJhrEOr7cdiA0CRV5sKlhv" // Replace with your actual API key
+	apiKey := "" // Replace with your actual API key
 
 	requestBody, err := json.Marshal(map[string]interface{}{
 		"model": "gpt-3.5-turbo",
