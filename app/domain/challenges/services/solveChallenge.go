@@ -45,7 +45,7 @@ func (sgs *ChallengeService) SolveChallenge(ctx context.Context, challenge chall
 			return "", chatGPTErr
 		}
 
-		output = []byte(fmt.Sprintf("Jarvis (Chatgpt Helper) disse: erro encontrado %s, sugestao: %s", errorOutput, chatGPTResponse))
+		output = []byte(fmt.Sprintf("Jarvis (Chatgpt Helper): erro encontrado %s, sugestão: %s", errorOutput, chatGPTResponse))
 	}
 
 	return string(output), nil
@@ -58,8 +58,8 @@ func callChatGPTAPI(answerText, errorOutput string) (string, error) {
 	requestBody, err := json.Marshal(map[string]interface{}{
 		"model": "gpt-3.5-turbo",
 		"messages": []map[string]string{
-			{"role": "system", "content": "You are a helpful assistant."},
-			{"role": "user", "content": "Analyze the following Python script error and explain what might be wrong:\n" + errorOutput + "the original python code is:" + answerText},
+			{"role": "system", "content": "Você é um assistente de códigos, seja super sucinto e direto em sua resposta e atenha-se apenas aos erros sintáticos gerados, não dê a resposta do código, apenas uma dica"},
+			{"role": "user", "content":  "Analise o seguinte erro gerado pelo código python e explique o que talvez tenha dado errado:\n" + errorOutput + "o código original em python é:" + answerText},
 		},
 		"max_tokens": 150,
 	})
