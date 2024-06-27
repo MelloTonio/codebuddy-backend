@@ -7,4 +7,5 @@ type Repository interface {
 	GetProfile(ctx context.Context, profile Profile) (Profile, error)
 	UpdateProfileByUsername(ctx context.Context, username string, groupName string) error
 	GetAllProfiles(ctx context.Context) ([]Profile, error)
+	GetAllProfilesNotInGroup(ctx context.Context, groupName string) ([]Profile, error)
 }

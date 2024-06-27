@@ -17,6 +17,7 @@ func NewHandler(r chi.Router, usecase studygroups.Service) *StudyGroupHandler {
 	}
 
 	r.Post("/studygroup/create", h.CreateStudyGroup)
+	r.Post("/studygroup/update", h.AddStudentsToGroup)
 	r.Get("/studygroup/students", h.ListStudentGroups)
 	r.Get("/studygroup/groups", h.ListGroupStudents)
 	r.Get("/studygroup/warnings/{studyGroup}", h.GetWarnings)

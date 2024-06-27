@@ -178,3 +178,31 @@ func (rr *StudyGroupRepo) GetWarnings(ctx context.Context, studyGroupName string
 	logrus.Infof("%+v", studyGroup.Warnings)
 	return studyGroup.Warnings, nil
 }
+
+func (rr *StudyGroupRepo) AddStudentsToGroup(ctx context.Context, studyGroupName string, students []string) error {
+	filter := bson.M{"name": studyGroupName}
+
+	update := bson.M{
+		"$addToSet": bson.M{
+			"students": bson.M{
+				"$each": students,
+			},
+		},
+	}
+
+	logrus.Infof("updating study group %s with students %+v", studyGroupName, students)
+
+	result, err := rr.DocDb.Pool.Collection(studyGroupsCollection).UpdateOne(ctx, filter, update)
+	if err != nil {
+		log.Printf("Failed to add students to study group: %v", err)
+		return err
+	}
+
+	if result.MatchedCount == 0 {
+		log.Printf("No study group found with the name: %s", studyGroupName)
+		return mongo.ErrNoDocuments
+	}
+
+	log.Printf("Students added to study group: %s", studyGroupName)
+	return nil
+}

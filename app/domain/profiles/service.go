@@ -8,4 +8,5 @@ type Service interface {
 	ValidateProfile(ctx context.Context, profile Profile) (string, error)
 	UpdateProfileByUsername(ctx context.Context, usernames string, groupName string) error
 	GetAllProfiles(ctx context.Context) ([]Profile, error)
+	GetAllProfilesNotInGroup(ctx context.Context, groupName string) ([]Profile, error)
 }

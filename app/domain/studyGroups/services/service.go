@@ -20,6 +20,18 @@ func NewStudyGroupService(StudyGroupRepository studygroups.Repository, ProfileSe
 	}
 }
 
+func (sgs *StudyGroupService) AddStudentsToGroup(ctx context.Context, studyGroupName string, students []string) error {
+	err := sgs.StudyGroupRepository.AddStudentsToGroup(ctx, studyGroupName, students)
+	if err != nil {
+		panic(err)
+	}
+	for _, student := range students {
+		sgs.ProfileService.UpdateProfileByUsername(ctx, student, studyGroupName)
+	}
+
+	return nil
+}
+
 func (sgs *StudyGroupService) SaveStudyGroup(ctx context.Context, studyGroup studygroups.StudyGroup) error {
 	err := sgs.StudyGroupRepository.SaveStudyGroup(ctx, studyGroup)
 	if err != nil {

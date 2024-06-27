@@ -18,6 +18,7 @@ func NewHandler(r chi.Router, usecase profiles.Service) *ProfileHandler {
 	r.Post("/profile/create", h.CreateProfile)
 	r.Get("/profile", h.GetProfile)
 	r.Get("/profiles", h.GetAllProfiles)
+	r.Get("/profiles/notIn", h.GetAllProfilesNotInGroup)
 	r.Post("/profile/validate", h.ValidateProfile)
 
 	return h

@@ -3,6 +3,7 @@ package mongodb
 import (
 	"context"
 	"errors"
+	"fmt"
 	"log"
 
 	"github.com/mellotonio/desafiogo/app/domain/profiles"
@@ -41,7 +42,9 @@ func (cr *ProfileRepo) CreateProfile(ctx context.Context, profile profiles.Profi
 
 func (cr *ProfileRepo) GetAllProfiles(ctx context.Context) ([]profiles.Profile, error) {
 	var results []profiles.Profile
-	cur, err := cr.DocDb.Pool.Collection(profileCollection).Find(context.TODO(), bson.D{{}})
+
+	filter := bson.M{"profile_type": "Aluno"}
+	cur, err := cr.DocDb.Pool.Collection(profileCollection).Find(context.TODO(), filter)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -99,4 +102,39 @@ func (cr *ProfileRepo) GetProfile(ctx context.Context, profile profiles.Profile)
 	}
 
 	return storedProfile, nil
+}
+
+func (cr *ProfileRepo) GetAllProfilesNotInGroup(ctx context.Context, groupName string) ([]profiles.Profile, error) {
+	var results []profiles.Profile
+
+	filter := bson.M{
+		"profile_type": "Aluno",
+		"groups": bson.M{
+			"$nin": []string{groupName},
+		},
+	}
+
+	cur, err := cr.DocDb.Pool.Collection(profileCollection).Find(context.TODO(), filter)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer cur.Close(ctx)
+
+	for cur.Next(context.TODO()) {
+		var elem profiles.Profile
+		err := cur.Decode(&elem)
+		fmt.Println(elem)
+		if err != nil {
+			log.Fatal(err)
+		}
+		results = append(results, profiles.Profile{
+			Username: elem.Username,
+		})
+	}
+	if err := cur.Err(); err != nil {
+		log.Fatal(err)
+	}
+
+	logrus.Infof("success %+v", results)
+	return results, err
 }
