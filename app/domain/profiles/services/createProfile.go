@@ -32,6 +32,15 @@ func (sgs *ProfileService) CreateProfile(ctx context.Context, profile profiles.P
 	return nil
 }
 
+func (sgs *ProfileService) GetAllProfiles(ctx context.Context) ([]profiles.Profile, error) {
+	profiles, err := sgs.ProfileRepository.GetAllProfiles(ctx)
+	if err != nil {
+		return profiles, err
+	}
+
+	return profiles, err
+}
+
 // hashPassword hashes a plain text password using bcrypt
 func hashPassword(password string) (string, error) {
 	hashedBytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)

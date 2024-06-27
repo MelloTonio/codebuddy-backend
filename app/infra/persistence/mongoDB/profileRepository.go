@@ -39,6 +39,31 @@ func (cr *ProfileRepo) CreateProfile(ctx context.Context, profile profiles.Profi
 	return err
 }
 
+func (cr *ProfileRepo) GetAllProfiles(ctx context.Context) ([]profiles.Profile, error) {
+	var results []profiles.Profile
+	cur, err := cr.DocDb.Pool.Collection(profileCollection).Find(context.TODO(), bson.D{{}})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for cur.Next(context.TODO()) {
+		var elem profiles.Profile
+		err := cur.Decode(&elem)
+		if err != nil {
+			log.Fatal(err)
+		}
+		results = append(results, profiles.Profile{
+			Username: elem.Username,
+		})
+	}
+	if err := cur.Err(); err != nil {
+		log.Fatal(err)
+	}
+
+	logrus.Infof("success %+v", results)
+	return results, err
+}
+
 func (cr *ProfileRepo) UpdateProfileByUsername(ctx context.Context, username string, groupName string) error {
 	filter := bson.M{
 		"username": username,
